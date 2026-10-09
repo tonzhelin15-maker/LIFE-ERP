@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#172033">
+  <meta name="description" content="人生 ERP：整合目標、任務、專案、財務與習慣。">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./styles.css">
+  <title>人生 ERP</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">人</div><div><strong>人生 ERP</strong><small>PERSONAL OPERATING SYSTEM</small></div></div>
+      <nav id="nav" class="nav">
+        <button class="nav-item active" data-page="dashboard">◫ <span>人生總覽</span></button>
+        <button class="nav-item" data-page="tasks">☑ <span>任務管理</span></button>
+        <button class="nav-item" data-page="goals">◎ <span>目標管理</span></button>
+        <button class="nav-item" data-page="projects">▤ <span>專案管理</span></button>
+        <button class="nav-item" data-page="finance">＄ <span>財務管理</span></button>
+        <button class="nav-item" data-page="habits">↗ <span>習慣追蹤</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div id="driveStatus" class="drive-status"><span class="status-dot"></span><span>尚未連結 Google Drive</span></div>
+        <button id="connectDrive" class="button button-outline full">連結 Google Drive</button>
+        <p class="side-note">資料預設儲存在此裝置。連結雲端後，可手動同步到你的 Google Drive。</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuToggle" class="icon-button mobile-only" aria-label="開啟選單">☰</button>
+        <div><div class="eyebrow">PERSONAL WORKSPACE</div><h1 id="pageTitle">人生總覽</h1></div>
+        <div class="top-actions">
+          <span id="todayLabel" class="today-label"></span>
+          <button id="syncButton" class="button button-dark">同步資料</button>
+        </div>
+      </header>
+
+      <section id="page-dashboard" class="page active">
+        <div class="welcome-row">
+          <div><div class="eyebrow">YOUR LIFE, IN ONE PLACE</div><h2>把想做的人生，變成能執行的系統。</h2><p>先整理方向，再安排今天可以完成的下一步。</p></div>
+          <button class="button button-primary" data-action="quick-task">＋ 新增任務</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>待完成任務</span><strong id="statTasks">0</strong><small>尚未完成</small></article>
+          <article class="stat-card"><span>進行中目標</span><strong id="statGoals">0</strong><small>持續累積進度</small></article>
+          <article class="stat-card"><span>進行中專案</span><strong id="statProjects">0</strong><small>把想法推進到成果</small></article>
+          <article class="stat-card"><span>本月收支結餘</span><strong id="statBalance">$0</strong><small>依目前記錄計算</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel"><div class="panel-heading"><div><div class="eyebrow">NEXT ACTIONS</div><h3>接下來要做</h3></div><button class="text-button" data-page-link="tasks">查看全部 →</button></div><div id="dashboardTasks" class="item-list"></div></article>
+          <article class="panel"><div class="panel-heading"><div><div class="eyebrow">GOALS IN MOTION</div><h3>目標進度</h3></div><button class="text-button" data-page-link="goals">管理目標 →</button></div><div id="dashboardGoals" class="item-list"></div></article>
+        </div>
+        <article class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">START SMALL</div><h3>快速建立</h3></div></div><div class="quick-actions"><button data-action="quick-task">＋ 任務</button><button data-action="quick-goal">＋ 目標</button><button data-action="quick-project">＋ 專案</button><button data-action="quick-transaction">＋ 收支</button><button data-action="quick-habit">＋ 習慣</button></div></article>
+      </section>
+
+      <section id="page-tasks" class="page">
+        <div class="section-intro"><div><h2>任務管理</h2><p>把下一步寫清楚，讓目標能落地。</p></div><button class="button button-primary" data-action="quick-task">＋ 新增任務</button></div>
+        <div class="filter-row"><input id="taskSearch" class="field search-field" placeholder="搜尋任務…" aria-label="搜尋任務"><select id="taskFilter" class="field"><option value="all">全部任務</option><option value="open">未完成</option><option value="done">已完成</option></select></div>
+        <div id="taskList" class="item-list panel"></div>
+      </section>
+
+      <section id="page-goals" class="page">
+        <div class="section-intro"><div><h2>目標管理</h2><p>讓年度方向、階段成果與下一步連在一起。</p></div><button class="button button-primary" data-action="quick-goal">＋ 新增目標</button></div>
+        <div id="goalList" class="cards-grid"></div>
+      </section>
+
+      <section id="page-projects" class="page">
+        <div class="section-intro"><div><h2>專案管理</h2><p>管理正在推進的計畫，不再只靠腦袋記住。</p></div><button class="button button-primary" data-action="quick-project">＋ 新增專案</button></div>
+        <div id="projectList" class="cards-grid"></div>
+      </section>
+
+      <section id="page-finance" class="page">
+        <div class="section-intro"><div><h2>財務管理</h2><p>記錄每一筆收入與支出，逐步看清現金流。</p></div><button class="button button-primary" data-action="quick-transaction">＋ 新增收支</button></div>
+        <div class="finance-summary">
+          <article class="stat-card"><span>本月收入</span><strong id="financeIncome">$0</strong></article>
+          <article class="stat-card"><span>本月支出</span><strong id="financeExpense">$0</strong></article>
+          <article class="stat-card"><span>本月結餘</span><strong id="financeNet">$0</strong></article>
+        </div>
+        <div id="transactionList" class="item-list panel"></div>
+      </section>
+
+      <section id="page-habits" class="page">
+        <div class="section-intro"><div><h2>習慣追蹤</h2><p>重點不是每天完美，而是看見自己持續累積。</p></div><button class="button button-primary" data-action="quick-habit">＋ 新增習慣</button></div>
+        <div id="habitList" class="cards-grid"></div>
+      </section>
+
+      <footer class="app-footer"><span>人生 ERP · 第一版</span><span id="saveStatus">資料儲存在此裝置</span></footer>
+    </main>
+  </div>
+
+  <dialog id="entryDialog" class="dialog">
+    <form id="entryForm" method="dialog">
+      <div class="dialog-heading"><div><div class="eyebrow">QUICK ENTRY</div><h2 id="dialogTitle">新增項目</h2></div><button type="button" id="closeDialog" class="icon-button" aria-label="關閉">✕</button></div>
+      <div id="formFields" class="form-fields"></div>
+      <div class="dialog-actions"><button type="button" id="cancelEntry" class="button button-outline">取消</button><button type="submit" class="button button-primary">儲存</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="./app.js"></script>
+</body>
+</html>

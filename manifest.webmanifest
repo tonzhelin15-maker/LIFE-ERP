@@ -1,0 +1,11 @@
+{
+  "name": "人生 ERP",
+  "short_name": "人生ERP",
+  "description": "整合目標、任務、專案、財務與習慣的個人管理系統",
+  "lang": "zh-Hant",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#172033",
+  "icons": []
+}
