@@ -386,7 +386,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
-    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex;position:fixed;z-index:10000;inset:0 auto 0 0;width:min(82vw,320px);background:#fff;box-shadow:8px 0 24px #0003;overflow:auto}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
+    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed;z-index:10000;inset:0 auto 0 0;width:min(82vw,320px);background:#fff;box-shadow:8px 0 24px #0003;overflow:auto}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
     document.head.appendChild(style);
   });
 })();
