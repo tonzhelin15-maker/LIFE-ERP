@@ -373,10 +373,20 @@
     data[kind].unshift(item); save(); render();
   }
   document.addEventListener("click", e => {
+    if (e.target.closest("#menuToggle")) {
+      const sidebar = document.querySelector(".sidebar");
+      if (sidebar) sidebar.classList.toggle("mobile-open");
+      return;
+    }
     const del = e.target.closest("[data-del]"); if (del) { data[del.dataset.del] = data[del.dataset.del].filter(x => x.id !== del.dataset.id); save(); render(); return; }
     const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-goal":"goals","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits"}; if (action && map[action]) add(map[action]);
-    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); }
+    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("mobile-open"); }
     if (e.target.closest("#connectDrive, #syncButton")) window.LifeERPSync?.connectAndSync().then(()=>{ try { data=JSON.parse(localStorage.getItem(KEY)||"null")||data; render(); } catch(_){} }).catch(()=>{});
   });
-  document.addEventListener("DOMContentLoaded", () => { render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW"); });
+  document.addEventListener("DOMContentLoaded", () => {
+    render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
+    const style = document.createElement("style");
+    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex;position:fixed;z-index:10000;inset:0 auto 0 0;width:min(82vw,320px);background:#fff;box-shadow:8px 0 24px #0003;overflow:auto}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
+    document.head.appendChild(style);
+  });
 })();
