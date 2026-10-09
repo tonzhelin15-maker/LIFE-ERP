@@ -33,6 +33,8 @@
     }));
     const node = document.querySelector("[data-lifeerp-sync-status]");
     if (node) node.textContent = message;
+    const drive = document.querySelector("#driveStatus");
+    if (drive) drive.innerHTML = '<span class="status-dot"></span><span>' + message + '</span>';
   }
 
   function readLocal() {
@@ -287,6 +289,7 @@
       return local.value;
     } catch (error) {
       status(error.message || "同步失敗。", "error");
+      window.alert("Google Drive 同步失敗：\n\n" + (error.message || "未知錯誤"));
       throw error;
     } finally {
       busy = false;
