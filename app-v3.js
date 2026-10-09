@@ -372,18 +372,18 @@
   document.addEventListener("click", e => {
     if (e.target.closest("#menuToggle")) {
       const sidebar = document.querySelector(".sidebar");
-      if (sidebar) sidebar.classList.toggle("mobile-open");
+      if (sidebar) sidebar.classList.toggle("open");
       return;
     }
     const del = e.target.closest("[data-del]"); if (del) { data[del.dataset.del] = data[del.dataset.del].filter(x => x.id !== del.dataset.id); save(); render(); return; }
     const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-goal":"goals","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits"}; if (action && map[action]) add(map[action]);
-    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("mobile-open"); }
+    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("open"); }
     if (e.target.closest("#connectDrive, #syncButton")) window.LifeERPSync?.connectAndSync().then(()=>{ try { data=JSON.parse(localStorage.getItem(KEY)||"null")||data; render(); } catch(_){} }).catch(()=>{});
   });
   document.addEventListener("DOMContentLoaded", () => {
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
-    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex!important;visibility:visible!important;opacity:1!important;transform:none!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#fff!important;box-shadow:8px 0 24px #0003;overflow:auto!important}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
+    style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#fff!important;box-shadow:8px 0 24px #0003;overflow:auto!important}.sidebar.open + .main{filter:brightness(.7)}}";
     document.head.appendChild(style);
   });
 })();
