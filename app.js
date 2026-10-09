@@ -120,7 +120,7 @@
 
   async function findRemote() {
     const q = encodeURIComponent("name='" + FILE_NAME + "' and trashed=false");
-    const result = await api("/files?spaces=appDataFolder&q=" + q + "&fields=files(id,name,modifiedTime,etag)&pageSize=10");
+    const result = await api("/files?spaces=appDataFolder&q=" + q + "&fields=files(id,name,modifiedTime)&pageSize=10");
     return (result.files || [])[0] || null;
   }
 
@@ -141,7 +141,7 @@
     const metadata = { name: FILE_NAME, parents: ["appDataFolder"], mimeType: "application/json" };
     const body = "--" + boundary + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + JSON.stringify(metadata) +
       "\r\n--" + boundary + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + raw + "\r\n--" + boundary + "--";
-    const response = await fetch(UPLOAD_API + "/files?uploadType=multipart&fields=id,name,modifiedTime,etag", {
+    const response = await fetch(UPLOAD_API + "/files?uploadType=multipart&fields=id,name,modifiedTime", {
       method: "POST",
       headers: { Authorization: "Bearer " + accessToken, "Content-Type": "multipart/related; boundary=" + boundary },
       body
@@ -156,7 +156,7 @@
     if (!current || current.id !== file.id || (file.modifiedTime && current.modifiedTime !== file.modifiedTime)) {
       throw new Error("雲端資料在同步期間已被其他裝置更新。這次沒有覆蓋；請重新載入雲端資料並處理衝突。");
     }
-    const response = await fetch(UPLOAD_API + "/files/" + encodeURIComponent(file.id) + "?uploadType=media&fields=id,name,modifiedTime,etag", {
+    const response = await fetch(UPLOAD_API + "/files/" + encodeURIComponent(file.id) + "?uploadType=media&fields=id,name,modifiedTime", {
       method: "PATCH",
       headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" },
       body: raw
