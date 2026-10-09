@@ -1,0 +1,43 @@
+/* Life ERP dark theme: load after styles.css */
+:root{
+  --ink:#f5f7fb;
+  --muted:#aab3c2;
+  --line:#303846;
+  --paper:#11151c;
+  --white:#1b222d;
+  --accent:#ff9f43;
+  --accent-soft:#3a2b1c;
+  --green:#48c99a;
+  --red:#ff7777;
+}
+
+body{background:#11151c;color:#f5f7fb}
+.sidebar,.panel,.stat-card,.entity-card,.dialog,.field,.button-outline,.quick-actions button,
+.form-field input,.form-field select,.form-field textarea{background:#1b222d;color:#f5f7fb;border-color:#303846}
+.sidebar{border-right-color:#303846}
+.brand-mark,.button-dark{background:#f28c28;color:#151922}
+.brand small,.eyebrow,.item-sub,.stat-card small,.side-note,.app-footer,.today-label{color:#8f9aaa}
+.nav-item{color:#b7c0ce}
+.nav-item.active,.nav-item:hover{background:#3a2b1c;color:#ffb35c}
+.button-primary{background:#f28c28;color:#151922}
+.button-primary:hover{background:#ffad52}
+.button-outline{color:#ffad52;border-color:#895722}
+.button-outline:hover{background:#3a2b1c;border-color:#f28c28}
+.welcome-row{background:linear-gradient(120deg,#1b222d 20%,#29231d);border-color:#493a2a}
+.quick-actions button{color:#ffb35c}
+.quick-actions button:hover{border-color:#f28c28;color:#ffc477;background:#3a2b1c}
+.text-button{color:#ffad52}
+.pill{background:#303846;color:#c4ccd8}
+.pill.purple{background:#3a2b1c;color:#ffb35c}
+.progress-track{background:#303846}
+.progress-fill{background:#f28c28}
+.check{accent-color:#f28c28}
+.field:focus,.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:#f28c28;box-shadow:0 0 0 3px #f28c2833}
+.dialog::backdrop{background:#000b}
+.toast{background:#f28c28;color:#151922}
+.status-dot.connected{background:#48c99a}
+.mobile-only{background:#1b222d;color:#f5f7fb}
+@media(max-width:700px){
+  .sidebar{background:#171d26}
+  .sidebar.open,.sidebar.mobile-open{background:#171d26!important}
+}
