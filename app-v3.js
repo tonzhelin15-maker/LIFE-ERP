@@ -321,11 +321,8 @@
 
   // Add a button only when the existing page has not provided its own sync control.
   document.addEventListener("DOMContentLoaded", function () {
-    const existing = document.querySelector("[data-lifeerp-sync]");
+    const existing = document.querySelector("[data-lifeerp-sync], #connectDrive, #syncButton");
     if (existing) {
-      existing.addEventListener("click", function () {
-        connectAndSync().catch(function (error) { console.error(error); });
-      });
       return;
     }
     const button = document.createElement("button");
@@ -386,7 +383,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
-    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed;z-index:10000;inset:0 auto 0 0;width:min(82vw,320px);background:#fff;box-shadow:8px 0 24px #0003;overflow:auto}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
+    style.textContent = "@media (max-width: 800px){.sidebar.mobile-open{display:flex!important;visibility:visible!important;opacity:1!important;transform:none!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#fff!important;box-shadow:8px 0 24px #0003;overflow:auto!important}.sidebar.mobile-open + .main{filter:brightness(.7)}}";
     document.head.appendChild(style);
   });
 })();
