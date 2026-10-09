@@ -15,7 +15,7 @@
 (function () {
   "use strict";
 
-  const GOOGLE_CLIENT_ID = "PASTE_YOUR_OAUTH_CLIENT_ID_HERE";
+  const GOOGLE_CLIENT_ID = "37043859391-oplvfbrqs2l0d74pn10o8bmt2ogfnkn0.apps.googleusercontent.com";
   const FILE_NAME = "LifeERP-data.json";
   const STORAGE_KEY = "lifeErpData";
   const STATE_KEY = "lifeErpDriveSyncState";
@@ -333,4 +333,47 @@
     button.addEventListener("click", function () { connectAndSync().catch(function (error) { console.error(error); }); });
     document.body.appendChild(button);
   });
+})();
+
+// Minimal Life ERP UI layer for the supplied index.html. It keeps the app usable
+// when the original v1 app.js is unavailable and stores the same payload used by
+// LifeERPSync (localStorage: lifeErpData).
+(function () {
+  "use strict";
+  const KEY = "lifeErpData";
+  const blank = () => ({ tasks: [], goals: [], projects: [], transactions: [], habits: [] });
+  let data;
+  try { data = JSON.parse(localStorage.getItem(KEY) || "null") || blank(); } catch (_) { data = blank(); }
+  ["tasks", "goals", "projects", "transactions", "habits"].forEach(k => { if (!Array.isArray(data[k])) data[k] = []; });
+  const save = () => { localStorage.setItem(KEY, JSON.stringify(data, null, 2)); const n = document.querySelector("#saveStatus"); if (n) n.textContent = "已儲存在此裝置"; };
+  const esc = s => String(s ?? "").replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+  const id = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const money = n => "$" + Number(n || 0).toLocaleString("zh-TW");
+  const list = (key, selector, render) => { const el = document.querySelector(selector); if (el) el.innerHTML = data[key].length ? data[key].map(render).join("") : '<div class="empty-state">目前沒有資料</div>'; };
+  function render() {
+    list("tasks", "#taskList", x => `<div class="list-item"><strong>${esc(x.title)}</strong><small>${esc(x.due || "")}</small><button data-del="tasks" data-id="${x.id}">刪除</button></div>`);
+    list("goals", "#goalList", x => `<article class="card"><h3>${esc(x.title)}</h3><p>${esc(x.description || "")}</p><button data-del="goals" data-id="${x.id}">刪除</button></article>`);
+    list("projects", "#projectList", x => `<article class="card"><h3>${esc(x.title)}</h3><p>${esc(x.description || "")}</p><button data-del="projects" data-id="${x.id}">刪除</button></article>`);
+    list("habits", "#habitList", x => `<article class="card"><h3>${esc(x.title)}</h3><p>連續 ${Number(x.streak || 0)} 天</p><button data-del="habits" data-id="${x.id}">刪除</button></article>`);
+    list("transactions", "#transactionList", x => `<div class="list-item"><strong>${esc(x.title)}</strong><span>${x.type === "income" ? "+" : "-"}${money(x.amount)}</span><button data-del="transactions" data-id="${x.id}">刪除</button></div>`);
+    const open = data.tasks.filter(x => !x.done).length, goals = data.goals.length, projects = data.projects.length;
+    const income = data.transactions.filter(x => x.type === "income").reduce((a,x)=>a+Number(x.amount||0),0), expense = data.transactions.filter(x => x.type !== "income").reduce((a,x)=>a+Number(x.amount||0),0);
+    const set = (s,v) => { const e=document.querySelector(s); if(e)e.textContent=v; };
+    set("#statTasks", open); set("#statGoals", goals); set("#statProjects", projects); set("#statBalance", money(income-expense)); set("#financeIncome", money(income)); set("#financeExpense", money(expense)); set("#financeNet", money(income-expense));
+    list("tasks", "#dashboardTasks", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`); list("goals", "#dashboardGoals", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`);
+  }
+  function add(kind) {
+    const title = prompt("名稱"); if (!title) return;
+    const item = { id: id(), title: title.trim(), createdAt: new Date().toISOString() };
+    if (kind === "transactions") { const amount = prompt("金額"); if (!amount || isNaN(Number(amount))) return; item.amount = Number(amount); item.type = (prompt("輸入 income 表示收入；其他文字表示支出") || "expense").toLowerCase() === "income" ? "income" : "expense"; }
+    if (kind === "habits") item.streak = 0;
+    data[kind].unshift(item); save(); render();
+  }
+  document.addEventListener("click", e => {
+    const del = e.target.closest("[data-del]"); if (del) { data[del.dataset.del] = data[del.dataset.del].filter(x => x.id !== del.dataset.id); save(); render(); return; }
+    const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-goal":"goals","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits"}; if (action && map[action]) add(map[action]);
+    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); }
+    if (e.target.closest("#connectDrive, #syncButton")) window.LifeERPSync?.connectAndSync().then(()=>{ try { data=JSON.parse(localStorage.getItem(KEY)||"null")||data; render(); } catch(_){} }).catch(()=>{});
+  });
+  document.addEventListener("DOMContentLoaded", () => { render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW"); });
 })();
