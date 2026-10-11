@@ -66,5 +66,13 @@ Google 設定介面可能隨版本調整，請依 Cloud Console 的最新提示�
 - `transactions.goalId` / `transactions.projectId`：收入或支出對應的目標與專案
 - `habits.goalId`：習慣支援的目標
 - `schemaVersion`：資料結構版本，方便日後升級
+- `dreams`：夢想清單與可行性評估
+- `workProfiles`：工作、收入與可投入時間
+- `orr`：目標的 ORR 拆解節點
+- `tasks.quadrant`：重要／緊急四象限分類
 
 資料目前以 `localStorage` 儲存，後續透過 `LifeERP-data.json` 同步到 Google Drive。新增模組時，應優先沿用這些關聯欄位，讓 Dashboard 可以從目標一路追蹤到行動、時間、金錢與成果。
+
+## 人生規劃流程
+
+夢想先進入 `dreams`，由使用者自行評估金錢、時間與目前可行性；可行的夢想可以轉成 `goals`。目標再透過 `orr` 建立階層，連到專案與任務。任務使用 `quadrant` 保存重要／緊急四象限，`workProfiles` 則記錄正職、兼職、接案收入、工作時間與每週可投入時間。

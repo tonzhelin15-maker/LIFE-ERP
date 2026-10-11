@@ -17,12 +17,15 @@
       <nav id="nav" class="nav">
         <div class="nav-group-label">規劃</div>
         <button class="nav-item active" data-page="dashboard">◫ <span>人生總覽</span></button>
+        <button class="nav-item" data-page="dreams">✦ <span>夢想清單</span></button>
         <button class="nav-item" data-page="goals">◎ <span>目標管理</span></button>
         <div class="nav-group-label">執行</div>
+        <button class="nav-item" data-page="orr">◇ <span>ORR 拆解</span></button>
         <button class="nav-item" data-page="projects">▤ <span>專案管理</span></button>
         <button class="nav-item" data-page="tasks">☑ <span>任務管理</span></button>
         <button class="nav-item" data-page="habits">↗ <span>習慣追蹤</span></button>
         <div class="nav-group-label">資源</div>
+        <button class="nav-item" data-page="resources">◌ <span>工作與資源</span></button>
         <button class="nav-item" data-page="finance">＄ <span>財務管理</span></button>
       </nav>
       <div class="sidebar-bottom">
@@ -57,7 +60,7 @@
           <article class="panel"><div class="panel-heading"><div><div class="eyebrow">NEXT ACTIONS</div><h3>接下來要做</h3></div><button class="text-button" data-page-link="tasks">查看全部 →</button></div><div id="dashboardTasks" class="item-list"></div></article>
           <article class="panel"><div class="panel-heading"><div><div class="eyebrow">GOALS IN MOTION</div><h3>目標進度</h3></div><button class="text-button" data-page-link="goals">管理目標 →</button></div><div id="dashboardGoals" class="item-list"></div></article>
         </div>
-        <article class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">START SMALL</div><h3>快速建立</h3></div></div><div class="quick-actions"><button data-action="quick-task">＋ 任務</button><button data-action="quick-goal">＋ 目標</button><button data-action="quick-project">＋ 專案</button><button data-action="quick-transaction">＋ 收支</button><button data-action="quick-habit">＋ 習慣</button></div></article>
+        <article class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">START SMALL</div><h3>快速建立</h3></div></div><div class="quick-actions"><button data-action="quick-dream">＋ 夢想</button><button data-action="quick-goal">＋ 目標</button><button data-action="quick-orr">＋ ORR</button><button data-action="quick-task">＋ 任務</button><button data-action="quick-project">＋ 專案</button><button data-action="quick-transaction">＋ 收支</button><button data-action="quick-habit">＋ 習慣</button><button data-action="quick-work">＋ 工作</button></div></article>
         <article class="panel architecture-panel">
           <div class="panel-heading"><div><div class="eyebrow">LIFE ERP ARCHITECTURE</div><h3>人生系統的資料流</h3></div><span id="relationSummary" class="architecture-badge">尚未建立資料</span></div>
           <div class="architecture-flow">
@@ -80,6 +83,18 @@
         <div id="taskList" class="item-list panel"></div>
       </section>
 
+      <section id="page-dreams" class="page">
+        <div class="section-intro"><div><h2>夢想清單</h2><p>先把想做的人生記下來，再逐一評估是否可行。</p></div><button class="button button-primary" data-action="quick-dream">＋ 新增夢想</button></div>
+        <div class="module-note">夢想不需要一開始就規劃完整；先記錄，之後根據收入、時間與生活條件做可行性評估。</div>
+        <div id="dreamList" class="cards-grid"></div>
+      </section>
+
+      <section id="page-orr" class="page">
+        <div class="section-intro"><div><h2>ORR 拆解</h2><p>把正式目標拆成可以推進的結果、路徑與小目標。</p></div><button class="button button-primary" data-action="quick-orr">＋ 新增 ORR 節點</button></div>
+        <div class="module-note">每個 ORR 節點都可以連到夢想或目標，之後再往下連到專案與任務。</div>
+        <div id="orrList" class="cards-grid"></div>
+      </section>
+
       <section id="page-goals" class="page">
         <div class="section-intro"><div><h2>目標管理</h2><p>讓年度方向、階段成果與下一步連在一起。</p></div><button class="button button-primary" data-action="quick-goal">＋ 新增目標</button></div>
         <div id="goalList" class="cards-grid"></div>
@@ -98,6 +113,16 @@
           <article class="stat-card"><span>本月結餘</span><strong id="financeNet">$0</strong></article>
         </div>
         <div id="transactionList" class="item-list panel"></div>
+      </section>
+
+      <section id="page-resources" class="page">
+        <div class="section-intro"><div><h2>工作與資源</h2><p>先看清楚目前的收入來源與可投入時間，才知道目標是否可行。</p></div><button class="button button-primary" data-action="quick-work">＋ 新增工作／收入</button></div>
+        <div class="finance-summary resource-summary">
+          <article class="stat-card"><span>每月預估收入</span><strong id="resourceIncome">$0</strong><small>正職、兼職與接案</small></article>
+          <article class="stat-card"><span>每週工作時間</span><strong id="resourceHours">0 小時</strong><small>目前登記的工作</small></article>
+          <article class="stat-card"><span>每週可用時間</span><strong id="resourceFreeHours">0 小時</strong><small>可以投入目標的時間</small></article>
+        </div>
+        <div id="workList" class="cards-grid"></div>
       </section>
 
       <section id="page-habits" class="page">
@@ -119,6 +144,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="./app-v3.js?v=form-1"></script>
+<script src="./app-v3.js?v=life-system-1"></script>
 </body>
 </html>
