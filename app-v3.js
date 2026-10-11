@@ -341,11 +341,13 @@
 (function () {
   "use strict";
   const KEY = "lifeErpData";
-  const blank = () => ({ tasks: [], goals: [], projects: [], transactions: [], habits: [] });
+  const SCHEMA_VERSION = 2;
+  const blank = () => ({ schemaVersion: SCHEMA_VERSION, updatedAt: null, tasks: [], goals: [], projects: [], transactions: [], habits: [], timeEntries: [], learning: [], health: [], assets: [] });
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY) || "null") || blank(); } catch (_) { data = blank(); }
-  ["tasks", "goals", "projects", "transactions", "habits"].forEach(k => { if (!Array.isArray(data[k])) data[k] = []; });
-  const save = () => { localStorage.setItem(KEY, JSON.stringify(data, null, 2)); const n = document.querySelector("#saveStatus"); if (n) n.textContent = "已儲存在此裝置"; };
+  ["tasks", "goals", "projects", "transactions", "habits", "timeEntries", "learning", "health", "assets"].forEach(k => { if (!Array.isArray(data[k])) data[k] = []; });
+  data.schemaVersion = SCHEMA_VERSION;
+  const save = () => { data.updatedAt = new Date().toISOString(); localStorage.setItem(KEY, JSON.stringify(data, null, 2)); const n = document.querySelector("#saveStatus"); if (n) n.textContent = "已儲存在此裝置"; };
   const esc = s => String(s ?? "").replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
   const id = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const money = n => "$" + Number(n || 0).toLocaleString("zh-TW");
@@ -361,10 +363,24 @@
     const set = (s,v) => { const e=document.querySelector(s); if(e)e.textContent=v; };
     set("#statTasks", open); set("#statGoals", goals); set("#statProjects", projects); set("#statBalance", money(income-expense)); set("#financeIncome", money(income)); set("#financeExpense", money(expense)); set("#financeNet", money(income-expense));
     list("tasks", "#dashboardTasks", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`); list("goals", "#dashboardGoals", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`);
+    const relationItems = [
+      ...data.projects.map(x => ({ item: x, link: x.goalId })),
+      ...data.tasks.map(x => ({ item: x, link: x.goalId || x.projectId })),
+      ...data.transactions.map(x => ({ item: x, link: x.goalId || x.projectId })),
+      ...data.habits.map(x => ({ item: x, link: x.goalId }))
+    ];
+    const linked = relationItems.filter(x => x.link).length;
+    const total = relationItems.length;
+    set("#relationSummary", total ? `已連結 ${linked}/${total} 筆` : "尚未建立資料");
+    set("#relationHint", total ? (linked === total ? "目前所有執行資料都有上層關聯，之後可以直接從目標追蹤到實際行動。" : `目前有 ${total - linked} 筆資料尚未連到目標或專案；這些資料仍可使用，之後可以補上關聯。`) : "建立資料後，這裡會顯示目標、專案、任務與資源的連結狀況。");
   }
   function add(kind) {
     const title = prompt("名稱"); if (!title) return;
-    const item = { id: id(), title: title.trim(), createdAt: new Date().toISOString() };
+    const item = { id: id(), title: title.trim(), createdAt: new Date().toISOString(), status: "active", goalId: null, projectId: null };
+    if (kind === "tasks") { item.status = "open"; item.done = false; item.estimatedMinutes = 0; item.actualMinutes = 0; }
+    if (kind === "goals") { item.progress = 0; item.targetDate = null; }
+    if (kind === "projects") { item.budget = 0; item.progress = 0; }
+    if (kind === "transactions") { item.category = "other"; item.date = new Date().toISOString().slice(0, 10); }
     if (kind === "transactions") { const amount = prompt("金額"); if (!amount || isNaN(Number(amount))) return; item.amount = Number(amount); item.type = (prompt("輸入 income 表示收入；其他文字表示支出") || "expense").toLowerCase() === "income" ? "income" : "expense"; }
     if (kind === "habits") item.streak = 0;
     data[kind].unshift(item); save(); render();

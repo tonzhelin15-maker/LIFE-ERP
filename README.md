@@ -48,3 +48,23 @@ Google 設定介面可能隨版本調整，請依 Cloud Console 的最新提示�
 ## 資料安全
 
 財務資料可能相當敏感。使用個人 Google 帳號、妥善保護裝置與帳號，並定期下載備份。若要記錄密碼、身分證字號、銀行登入資訊等高度敏感資料，請不要存入此原型。
+## 架構版資料模型
+
+人生 ERP 是一個以「目標 → 專案 → 任務 → 實際結果」為主軸的個人管理系統。
+
+## 目前架構
+
+- 規劃：人生總覽、目標管理
+- 執行：專案管理、任務管理、習慣追蹤
+- 資源：財務管理
+- 預留：時間紀錄、學習、健康、資產
+
+## 資料連動
+
+- `projects.goalId`：專案所屬目標
+- `tasks.goalId` / `tasks.projectId`：任務所屬目標與專案
+- `transactions.goalId` / `transactions.projectId`：收入或支出對應的目標與專案
+- `habits.goalId`：習慣支援的目標
+- `schemaVersion`：資料結構版本，方便日後升級
+
+資料目前以 `localStorage` 儲存，後續透過 `LifeERP-data.json` 同步到 Google Drive。新增模組時，應優先沿用這些關聯欄位，讓 Dashboard 可以從目標一路追蹤到行動、時間、金錢與成果。
