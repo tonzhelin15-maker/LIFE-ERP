@@ -381,7 +381,7 @@
     if (menu && sidebar) menu.addEventListener("click", () => sidebar.classList.toggle("open"));
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
-    style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#fff!important;box-shadow:8px 0 24px #0003;overflow:auto!important}.sidebar.open + .main{filter:brightness(.7)}}";
+    style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#1b222d!important;color:#f5f7fb!important;box-shadow:8px 0 24px #0008;overflow:auto!important}.sidebar.open .nav-item{color:#b7c0ce!important}.sidebar.open .nav-item.active{color:#ffb35c!important;background:#3a2b1c!important}.sidebar.open .side-note,.sidebar.open .drive-status{color:#aab3c2!important}.sidebar.open + .main{filter:brightness(.7)}}";
     document.head.appendChild(style);
   });
 })();
