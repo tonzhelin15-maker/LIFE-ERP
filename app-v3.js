@@ -374,20 +374,46 @@
     set("#relationSummary", total ? `已連結 ${linked}/${total} 筆` : "尚未建立資料");
     set("#relationHint", total ? (linked === total ? "目前所有執行資料都有上層關聯，之後可以直接從目標追蹤到實際行動。" : `目前有 ${total - linked} 筆資料尚未連到目標或專案；這些資料仍可使用，之後可以補上關聯。`) : "建立資料後，這裡會顯示目標、專案、任務與資源的連結狀況。");
   }
-  function add(kind) {
-    const title = prompt("名稱"); if (!title) return;
-    const item = { id: id(), title: title.trim(), createdAt: new Date().toISOString(), status: "active", goalId: null, projectId: null };
-    if (kind === "tasks") { item.status = "open"; item.done = false; item.estimatedMinutes = 0; item.actualMinutes = 0; }
-    if (kind === "goals") { item.progress = 0; item.targetDate = null; }
-    if (kind === "projects") { item.budget = 0; item.progress = 0; }
-    if (kind === "transactions") { item.category = "other"; item.date = new Date().toISOString().slice(0, 10); }
-    if (kind === "transactions") { const amount = prompt("金額"); if (!amount || isNaN(Number(amount))) return; item.amount = Number(amount); item.type = (prompt("輸入 income 表示收入；其他文字表示支出") || "expense").toLowerCase() === "income" ? "income" : "expense"; }
-    if (kind === "habits") item.streak = 0;
-    data[kind].unshift(item); save(); render();
+  let entryKind = null;
+  const dialog = () => document.querySelector("#entryDialog");
+  const field = (label, name, type = "text", options = {}) => {
+    const optional = options.optional !== false ? "（可留白）" : "";
+    if (type === "textarea") return `<div class="form-field"><label for="entry-${name}">${label}${optional}</label><textarea id="entry-${name}" name="${name}" placeholder="${options.placeholder || ""}"></textarea></div>`;
+    if (type === "select") return `<div class="form-field"><label for="entry-${name}">${label}${optional}</label><select id="entry-${name}" name="${name}"><option value="">未指定</option>${(options.items || []).map(x => `<option value="${esc(x.value)}">${esc(x.label)}</option>`).join("")}</select></div>`;
+    return `<div class="form-field"><label for="entry-${name}">${label}${optional}</label><input id="entry-${name}" name="${name}" type="${type}" ${options.required ? "required" : ""} placeholder="${options.placeholder || ""}"></div>`;
+  };
+  const goalOptions = () => data.goals.map(x => ({ value: x.id, label: x.title }));
+  const projectOptions = () => data.projects.map(x => ({ value: x.id, label: x.title }));
+  function openEntryDialog(kind) {
+    const node = dialog(); if (!node) return;
+    entryKind = kind;
+    const titles = { tasks: "新增任務", goals: "新增目標", projects: "新增專案", transactions: "新增收支", habits: "新增習慣" };
+    const fields = {
+      tasks: field("任務名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("到期日", "due", "date") + field("預估時間（分鐘）", "estimatedMinutes", "number") + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("所屬專案", "projectId", "select", { items: projectOptions() }),
+      goals: field("目標名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("目標日期", "targetDate", "date") + field("目標數值", "targetValue", "number"),
+      projects: field("專案名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("截止日", "due", "date") + field("預算", "budget", "number") + field("所屬目標", "goalId", "select", { items: goalOptions() }),
+      transactions: field("項目名稱", "title", "text", { required: true, optional: false }) + field("金額", "amount", "number", { placeholder: "未填寫會以 0 計算" }) + field("類型", "type", "select", { items: [{ value: "expense", label: "支出" }, { value: "income", label: "收入" }] }) + field("日期", "date", "date") + field("分類", "category") + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("所屬專案", "projectId", "select", { items: projectOptions() }) + field("備註", "description", "textarea"),
+      habits: field("習慣名稱", "title", "text", { required: true, optional: false }) + field("頻率", "frequency", "select", { items: [{ value: "daily", label: "每天" }, { value: "weekly", label: "每週" }, { value: "custom", label: "自訂" }] }) + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("備註", "description", "textarea")
+    }[kind];
+    node.querySelector("#dialogTitle").textContent = titles[kind] || "新增項目";
+    node.querySelector("#formFields").innerHTML = fields || "";
+    node.showModal();
+  }
+  function submitEntry(form) {
+    const values = Object.fromEntries(new FormData(form).entries());
+    if (!values.title || !values.title.trim()) return;
+    const item = { id: id(), title: values.title.trim(), createdAt: new Date().toISOString(), status: "active", goalId: values.goalId || null, projectId: values.projectId || null };
+    ["description", "due", "targetDate", "targetValue", "estimatedMinutes", "budget", "frequency", "date", "category"].forEach(key => { if (values[key]) item[key] = values[key]; });
+    if (entryKind === "tasks") { item.status = "open"; item.done = false; item.estimatedMinutes = Number(values.estimatedMinutes || 0); item.actualMinutes = 0; }
+    if (entryKind === "goals") { item.progress = 0; }
+    if (entryKind === "projects") { item.progress = 0; item.budget = Number(values.budget || 0); }
+    if (entryKind === "transactions") { item.amount = Number(values.amount || 0); item.type = values.type || "expense"; item.date = values.date || new Date().toISOString().slice(0, 10); item.category = values.category || "other"; }
+    if (entryKind === "habits") item.streak = 0;
+    data[entryKind].unshift(item); save(); render(); dialog().close(); form.reset();
   }
   document.addEventListener("click", e => {
     const del = e.target.closest("[data-del]"); if (del) { data[del.dataset.del] = data[del.dataset.del].filter(x => x.id !== del.dataset.id); save(); render(); return; }
-    const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-goal":"goals","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits"}; if (action && map[action]) add(map[action]);
+    const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-goal":"goals","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits"}; if (action && map[action]) openEntryDialog(map[action]);
     const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("open"); }
     if (e.target.closest("#connectDrive, #syncButton")) window.LifeERPSync?.connectAndSync().then(()=>{ try { data=JSON.parse(localStorage.getItem(KEY)||"null")||data; render(); } catch(_){} }).catch(()=>{});
   });
@@ -395,6 +421,10 @@
     const menu = document.querySelector("#menuToggle");
     const sidebar = document.querySelector(".sidebar");
     if (menu && sidebar) menu.addEventListener("click", () => sidebar.classList.toggle("open"));
+    const form = document.querySelector("#entryForm");
+    if (form) form.addEventListener("submit", event => { event.preventDefault(); submitEntry(form); });
+    document.querySelector("#cancelEntry")?.addEventListener("click", () => dialog()?.close());
+    document.querySelector("#closeDialog")?.addEventListener("click", () => dialog()?.close());
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
     style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#1b222d!important;color:#f5f7fb!important;box-shadow:8px 0 24px #0008;overflow:auto!important}.sidebar.open .nav-item{color:#b7c0ce!important}.sidebar.open .nav-item.active{color:#ffb35c!important;background:#3a2b1c!important}.sidebar.open .side-note,.sidebar.open .drive-status{color:#aab3c2!important}.sidebar.open + .main{filter:brightness(.7)}}";
