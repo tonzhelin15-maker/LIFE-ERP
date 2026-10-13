@@ -459,7 +459,9 @@
     const themeSelect = document.querySelector("#themeSelect");
     const applyTheme = theme => { const next = ["gold", "steel", "cat"].includes(theme) ? theme : "dark"; document.documentElement.dataset.theme = next; localStorage.setItem("lifeErpTheme", next); if (themeSelect) themeSelect.value = next; };
     applyTheme(localStorage.getItem("lifeErpTheme") || "dark");
-    themeSelect?.addEventListener("change", event => applyTheme(event.target.value));
+    const handleThemeChange = event => applyTheme(event.target.value);
+    themeSelect?.addEventListener("change", handleThemeChange);
+    themeSelect?.addEventListener("input", handleThemeChange);
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
     style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:var(--paper)!important;color:var(--ink)!important;box-shadow:8px 0 24px #0008;overflow:auto!important}.sidebar.open .nav-item{color:var(--muted)!important}.sidebar.open .nav-item.active{color:var(--accent)!important;background:var(--accent-soft)!important}.sidebar.open .side-note,.sidebar.open .drive-status{color:var(--muted)!important}.sidebar.open + .main{filter:brightness(.7)}}";
