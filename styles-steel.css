@@ -1,0 +1,71 @@
+/* Life ERP stainless steel theme */
+html[data-theme="steel"]{
+  --ink:#edf2f5;
+  --muted:#a9b4bc;
+  --line:#3c4850;
+  --paper:#10161a;
+  --white:#202a30;
+  --accent:#cbd5da;
+  --accent-soft:#303b42;
+  --green:#79c7a2;
+  --red:#ff8580;
+}
+
+html[data-theme="steel"] body{background:#10161a;color:#edf2f5}
+html[data-theme="steel"] .sidebar,
+html[data-theme="steel"] .panel,
+html[data-theme="steel"] .stat-card,
+html[data-theme="steel"] .entity-card,
+html[data-theme="steel"] .dialog,
+html[data-theme="steel"] .field,
+html[data-theme="steel"] .button-outline,
+html[data-theme="steel"] .quick-actions button,
+html[data-theme="steel"] .form-field input,
+html[data-theme="steel"] .form-field select,
+html[data-theme="steel"] .form-field textarea{background:#202a30;color:#edf2f5;border-color:#3c4850}
+
+html[data-theme="steel"] .sidebar{border-right-color:#46535b}
+html[data-theme="steel"] .brand-mark{background:linear-gradient(135deg,#f5f8fa 0%,#89979f 38%,#e6ecef 52%,#66747c 100%);color:#172126;box-shadow:0 0 18px #cbd5da28}
+html[data-theme="steel"] .brand small,
+html[data-theme="steel"] .eyebrow,
+html[data-theme="steel"] .item-sub,
+html[data-theme="steel"] .stat-card small,
+html[data-theme="steel"] .side-note,
+html[data-theme="steel"] .app-footer,
+html[data-theme="steel"] .today-label{color:#92a0a8}
+html[data-theme="steel"] .nav-group-label{color:#92a0a8}
+html[data-theme="steel"] .nav-item{color:#c2cdd2}
+html[data-theme="steel"] .nav-item.active,
+html[data-theme="steel"] .nav-item:hover{background:#303b42;color:#f5f8fa}
+html[data-theme="steel"] .button-primary,
+html[data-theme="steel"] .toast{background:linear-gradient(135deg,#f1f5f6,#aebbc1 45%,#e1e8eb);color:#152025}
+html[data-theme="steel"] .button-primary:hover{background:linear-gradient(135deg,#ffffff,#c7d2d7 45%,#f1f5f6)}
+html[data-theme="steel"] .button-dark{background:#cbd5da;color:#152025}
+html[data-theme="steel"] .button-outline{color:#dce5e9;border-color:#71818a}
+html[data-theme="steel"] .button-outline:hover{background:#303b42;border-color:#cbd5da}
+html[data-theme="steel"] .welcome-row{background:linear-gradient(120deg,#202a30 18%,#303b42 52%,#192126);border-color:#53616a}
+html[data-theme="steel"] .quick-actions button{color:#d8e1e5}
+html[data-theme="steel"] .quick-actions button:hover{border-color:#cbd5da;color:#ffffff;background:#303b42}
+html[data-theme="steel"] .text-button{color:#e0e8eb}
+html[data-theme="steel"] .pill{background:#344149;color:#d5e0e4}
+html[data-theme="steel"] .pill.green{background:#203d32;color:#9de0bc}
+html[data-theme="steel"] .pill.purple{background:#344149;color:#e0e8eb}
+html[data-theme="steel"] .progress-track{background:#344149}
+html[data-theme="steel"] .progress-fill{background:linear-gradient(90deg,#77878f,#edf3f5,#8c9ba2)}
+html[data-theme="steel"] .check{accent-color:#cbd5da}
+html[data-theme="steel"] .field:focus,
+html[data-theme="steel"] .form-field input:focus,
+html[data-theme="steel"] .form-field select:focus,
+html[data-theme="steel"] .form-field textarea:focus{border-color:#cbd5da;box-shadow:0 0 0 3px #cbd5da33}
+html[data-theme="steel"] .dialog::backdrop{background:#060a0ccc}
+html[data-theme="steel"] .mobile-only{background:#202a30;color:#edf2f5}
+html[data-theme="steel"] .architecture-node,
+html[data-theme="steel"] .architecture-links span,
+html[data-theme="steel"] .module-note{background:#202a30;border-color:#3c4850}
+html[data-theme="steel"] .architecture-icon,
+html[data-theme="steel"] .architecture-arrow{color:#dce6ea}
+html[data-theme="steel"] .architecture-badge{border-color:#3c4850;color:#a9b4bc}
+html[data-theme="steel"] .theme-picker label{color:#cbd5da}
+html[data-theme="steel"] .theme-picker select{background:#202a30;color:#edf2f5;border-color:#3c4850}
+html[data-theme="steel"] .status-dot{background:#71818a}
+html[data-theme="steel"] .status-dot.connected{background:#79c7a2}
