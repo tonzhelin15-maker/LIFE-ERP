@@ -11,7 +11,7 @@ html[data-theme="steel"]{
   --red:#ff8580;
 }
 
-html[data-theme="steel"] body{background:#10161a;color:#edf2f5}
+html[data-theme="steel"] body{background-color:#10161a;color:#edf2f5;background-image:linear-gradient(#10161ae8,#10161ae8),url("https://upload.wikimedia.org/wikipedia/commons/f/f0/Dark_grey_stainless_steel_heavily_scratched_worn_seamless_metal_surface_texture.jpg");background-size:auto,560px 560px;background-repeat:repeat;background-attachment:fixed}
 html[data-theme="steel"] .sidebar,
 html[data-theme="steel"] .panel,
 html[data-theme="steel"] .stat-card,
@@ -23,6 +23,10 @@ html[data-theme="steel"] .quick-actions button,
 html[data-theme="steel"] .form-field input,
 html[data-theme="steel"] .form-field select,
 html[data-theme="steel"] .form-field textarea{background:#202a30;color:#edf2f5;border-color:#3c4850}
+html[data-theme="steel"] .panel,
+html[data-theme="steel"] .stat-card,
+html[data-theme="steel"] .entity-card,
+html[data-theme="steel"] .sidebar{background-color:#202a30;background-image:linear-gradient(#202a30e8,#202a30e8),url("https://upload.wikimedia.org/wikipedia/commons/f/f0/Dark_grey_stainless_steel_heavily_scratched_worn_seamless_metal_surface_texture.jpg");background-size:auto,420px 420px;background-repeat:repeat}
 
 html[data-theme="steel"] .sidebar{border-right-color:#46535b}
 html[data-theme="steel"] .brand-mark{background:linear-gradient(135deg,#f5f8fa 0%,#89979f 38%,#e6ecef 52%,#66747c 100%);color:#172126;box-shadow:0 0 18px #cbd5da28}
@@ -38,7 +42,7 @@ html[data-theme="steel"] .nav-item{color:#c2cdd2}
 html[data-theme="steel"] .nav-item.active,
 html[data-theme="steel"] .nav-item:hover{background:#303b42;color:#f5f8fa}
 html[data-theme="steel"] .button-primary,
-html[data-theme="steel"] .toast{background:linear-gradient(135deg,#f1f5f6,#aebbc1 45%,#e1e8eb);color:#152025}
+html[data-theme="steel"] .toast{background-image:linear-gradient(135deg,#f1f5f6e8,#aebbc1e8 45%,#e1e8ebe8),url("https://upload.wikimedia.org/wikipedia/commons/f/f0/Dark_grey_stainless_steel_heavily_scratched_worn_seamless_metal_surface_texture.jpg");background-size:auto,180px 180px;color:#152025}
 html[data-theme="steel"] .button-primary:hover{background:linear-gradient(135deg,#ffffff,#c7d2d7 45%,#f1f5f6)}
 html[data-theme="steel"] .button-dark{background:#cbd5da;color:#152025}
 html[data-theme="steel"] .button-outline{color:#dce5e9;border-color:#71818a}

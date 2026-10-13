@@ -74,6 +74,8 @@ Google 設定介面可能隨版本調整，請依 Cloud Console 的最新提示�
 - `things`：設備、文件、訂閱與其他資產
 - 主題：可在側邊欄選擇深色橘金、燙金或不鏽鋼主題，設定保存在本機
 
+主題紋理來源：燙金使用 ambientCG Foil002 預覽材質（CC0）；不鏽鋼使用 Wikimedia Commons 的 Dark grey stainless steel seamless texture（CC0）。
+
 資料目前以 `localStorage` 儲存，後續透過 `LifeERP-data.json` 同步到 Google Drive。新增模組時，應優先沿用這些關聯欄位，讓 Dashboard 可以從目標一路追蹤到行動、時間、金錢與成果。
 
 ## 人生規劃流程

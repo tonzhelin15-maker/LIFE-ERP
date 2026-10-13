@@ -11,7 +11,7 @@ html[data-theme="gold"]{
   --red:#e98273;
 }
 
-html[data-theme="gold"] body{background:#120f0a;color:#f8edcf}
+html[data-theme="gold"] body{background-color:#120f0a;color:#f8edcf;background-image:linear-gradient(#120f0ae8,#120f0ae8),url("https://upload.wikimedia.org/wikipedia/commons/e/e4/Foil002_PREVIEW.png");background-size:auto,560px 560px;background-repeat:repeat;background-attachment:fixed}
 html[data-theme="gold"] .sidebar,
 html[data-theme="gold"] .panel,
 html[data-theme="gold"] .stat-card,
@@ -23,6 +23,10 @@ html[data-theme="gold"] .quick-actions button,
 html[data-theme="gold"] .form-field input,
 html[data-theme="gold"] .form-field select,
 html[data-theme="gold"] .form-field textarea{background:#211a10;color:#f8edcf;border-color:#5a4725}
+html[data-theme="gold"] .panel,
+html[data-theme="gold"] .stat-card,
+html[data-theme="gold"] .entity-card,
+html[data-theme="gold"] .sidebar{background-color:#211a10;background-image:linear-gradient(#211a10e8,#211a10e8),url("https://upload.wikimedia.org/wikipedia/commons/e/e4/Foil002_PREVIEW.png");background-size:auto,420px 420px;background-repeat:repeat}
 
 html[data-theme="gold"] .sidebar{border-right-color:#5a4725}
 html[data-theme="gold"] .brand-mark{background:linear-gradient(135deg,#f3d477,#a97918 45%,#ffe7a1);color:#211707;box-shadow:0 0 18px #d6ad4533}
@@ -38,7 +42,7 @@ html[data-theme="gold"] .nav-item{color:#d1c09a}
 html[data-theme="gold"] .nav-item.active,
 html[data-theme="gold"] .nav-item:hover{background:#3b2b13;color:#f4cb68}
 html[data-theme="gold"] .button-primary,
-html[data-theme="gold"] .toast{background:linear-gradient(135deg,#f1cf6b,#b27d1c 48%,#e5bc55);color:#241a08}
+html[data-theme="gold"] .toast{background-image:linear-gradient(135deg,#f1cf6be8,#b27d1ce8 48%,#e5bc55e8),url("https://upload.wikimedia.org/wikipedia/commons/e/e4/Foil002_PREVIEW.png");background-size:auto,180px 180px;color:#241a08}
 html[data-theme="gold"] .button-primary:hover{background:linear-gradient(135deg,#ffe28a,#c28d28 48%,#f6d06a)}
 html[data-theme="gold"] .button-dark{background:#d6ad45;color:#241a08}
 html[data-theme="gold"] .button-outline{color:#e9c666;border-color:#a87e2c}
