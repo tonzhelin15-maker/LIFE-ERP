@@ -457,7 +457,7 @@
     document.querySelector("#cancelEntry")?.addEventListener("click", () => dialog()?.close());
     document.querySelector("#closeDialog")?.addEventListener("click", () => dialog()?.close());
     const themeSelect = document.querySelector("#themeSelect");
-    const applyTheme = theme => { const next = ["gold", "steel"].includes(theme) ? theme : "dark"; document.documentElement.dataset.theme = next; localStorage.setItem("lifeErpTheme", next); if (themeSelect) themeSelect.value = next; };
+    const applyTheme = theme => { const next = ["gold", "steel", "cat"].includes(theme) ? theme : "dark"; document.documentElement.dataset.theme = next; localStorage.setItem("lifeErpTheme", next); if (themeSelect) themeSelect.value = next; };
     applyTheme(localStorage.getItem("lifeErpTheme") || "dark");
     themeSelect?.addEventListener("change", event => applyTheme(event.target.value));
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");

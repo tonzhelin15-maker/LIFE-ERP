@@ -1,0 +1,21 @@
+/* Life ERP lucky cat theme */
+html[data-theme="cat"]{
+  --ink:#332018;--muted:#9b6f58;--line:#e2b77d;--paper:#fff8ed;--white:#fffdf8;
+  --accent:#e87922;--accent-soft:#fff0d7;--green:#5c9b72;--red:#d75b4c;
+}
+html[data-theme="cat"] body{
+  background-color:#fff8ed;color:#332018;
+  background-image:radial-gradient(circle at 12px 12px,#efb35a22 0 3px,transparent 4px),radial-gradient(circle at 4px 4px,#efb35a18 0 2px,transparent 3px),linear-gradient(135deg,#fffaf1,#fff3df 52%,#fffaf4);
+  background-size:48px 48px,48px 48px,auto;
+}
+html[data-theme="cat"] .sidebar,html[data-theme="cat"] .panel,html[data-theme="cat"] .stat-card,html[data-theme="cat"] .entity-card,html[data-theme="cat"] .dialog,html[data-theme="cat"] .field,html[data-theme="cat"] .button-outline,html[data-theme="cat"] .quick-actions button,html[data-theme="cat"] .form-field input,html[data-theme="cat"] .form-field select,html[data-theme="cat"] .form-field textarea{background:#fffdf8;color:#332018;border-color:#e2b77d}
+html[data-theme="cat"] .sidebar{border-right-color:#e2b77d;background-image:linear-gradient(#fffdf8ee,#fffdf8ee),radial-gradient(circle at 20% 10%,#e8792233 0 4px,transparent 5px);background-size:auto,52px 52px}
+html[data-theme="cat"] .brand-mark{background:radial-gradient(circle at 35% 28%,#ffd878 0 16%,#f28b25 55%,#c94c18 100%);color:#fff8e6;box-shadow:inset 0 -5px 8px #9e351766,0 5px 12px #e8792233}
+html[data-theme="cat"] .brand small,html[data-theme="cat"] .eyebrow,html[data-theme="cat"] .item-sub,html[data-theme="cat"] .stat-card small,html[data-theme="cat"] .side-note,html[data-theme="cat"] .app-footer,html[data-theme="cat"] .today-label,html[data-theme="cat"] .nav-group-label{color:#a9785d}
+html[data-theme="cat"] .nav-item{color:#77513f}html[data-theme="cat"] .nav-item.active,html[data-theme="cat"] .nav-item:hover{background:#fff0d7;color:#d85c1b}
+html[data-theme="cat"] .button-primary,html[data-theme="cat"] .toast{background:linear-gradient(135deg,#f6a62f,#e87520 58%,#c94b18);color:#fffaf0;box-shadow:inset 0 1px 0 #fff1b877,0 4px 10px #c94b1826}
+html[data-theme="cat"] .button-primary:hover{background:linear-gradient(135deg,#ffc24d,#ef8125 58%,#d85b1b)}html[data-theme="cat"] .button-dark{background:#3d2419;color:#fff9ed}html[data-theme="cat"] .button-outline{color:#d85c1b;border-color:#e2a15c}html[data-theme="cat"] .button-outline:hover{background:#fff0d7;border-color:#e87922}
+html[data-theme="cat"] .welcome-row{background:linear-gradient(120deg,#fffdf8 18%,#fff0d7);border-color:#e2b77d}html[data-theme="cat"] .quick-actions button{color:#b35a29}html[data-theme="cat"] .quick-actions button:hover{border-color:#e87922;color:#d85c1b;background:#fff5e6}html[data-theme="cat"] .text-button{color:#d85c1b}
+html[data-theme="cat"] .pill{background:#fff0d7;color:#9a5f3f}html[data-theme="cat"] .pill.green{background:#eaf6eb;color:#4c8b63}html[data-theme="cat"] .pill.purple{background:#fff0d7;color:#c15c25}html[data-theme="cat"] .progress-track{background:#f6e4c9}html[data-theme="cat"] .progress-fill{background:linear-gradient(90deg,#d85c1b,#f5a62e,#d85c1b)}html[data-theme="cat"] .check{accent-color:#e87922}
+html[data-theme="cat"] .field:focus,html[data-theme="cat"] .form-field input:focus,html[data-theme="cat"] .form-field select:focus,html[data-theme="cat"] .form-field textarea:focus{border-color:#e87922;box-shadow:0 0 0 3px #e8792233}html[data-theme="cat"] .dialog::backdrop{background:#4b241866;backdrop-filter:blur(3px)}html[data-theme="cat"] .mobile-only{background:#fffdf8;color:#332018}
+html[data-theme="cat"] .architecture-node,html[data-theme="cat"] .architecture-links span,html[data-theme="cat"] .module-note{background:#fffdf8;border-color:#e2b77d}html[data-theme="cat"] .architecture-icon,html[data-theme="cat"] .architecture-arrow{color:#e87922}html[data-theme="cat"] .architecture-badge{border-color:#e2b77d;color:#a9785d}html[data-theme="cat"] .theme-picker label{color:#a15f3f}html[data-theme="cat"] .theme-picker select{background:#fffdf8;color:#332018;border-color:#e2b77d}html[data-theme="cat"] .status-dot{background:#d3a576}html[data-theme="cat"] .status-dot.connected{background:#5c9b72}
