@@ -341,11 +341,11 @@
 (function () {
   "use strict";
   const KEY = "lifeErpData";
-  const SCHEMA_VERSION = 3;
-  const blank = () => ({ schemaVersion: SCHEMA_VERSION, updatedAt: null, tasks: [], dreams: [], goals: [], orr: [], projects: [], transactions: [], habits: [], workProfiles: [], timeEntries: [], learning: [], health: [], assets: [] });
+  const SCHEMA_VERSION = 4;
+  const blank = () => ({ schemaVersion: SCHEMA_VERSION, updatedAt: null, people: [], tasks: [], dreams: [], goals: [], orr: [], projects: [], transactions: [], habits: [], workProfiles: [], things: [], timeEntries: [], learning: [], health: [], assets: [] });
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY) || "null") || blank(); } catch (_) { data = blank(); }
-  ["tasks", "dreams", "goals", "orr", "projects", "transactions", "habits", "workProfiles", "timeEntries", "learning", "health", "assets"].forEach(k => { if (!Array.isArray(data[k])) data[k] = []; });
+  ["people", "tasks", "dreams", "goals", "orr", "projects", "transactions", "habits", "workProfiles", "things", "timeEntries", "learning", "health", "assets"].forEach(k => { if (!Array.isArray(data[k])) data[k] = []; });
   data.schemaVersion = SCHEMA_VERSION;
   const save = () => { data.updatedAt = new Date().toISOString(); localStorage.setItem(KEY, JSON.stringify(data, null, 2)); const n = document.querySelector("#saveStatus"); if (n) n.textContent = "已儲存在此裝置"; };
   const esc = s => String(s ?? "").replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
@@ -353,6 +353,7 @@
   const money = n => "$" + Number(n || 0).toLocaleString("zh-TW");
   const list = (key, selector, render) => { const el = document.querySelector(selector); if (el) el.innerHTML = data[key].length ? data[key].map(render).join("") : '<div class="empty-state">目前沒有資料</div>'; };
   function render() {
+    list("people", "#peopleList", x => `<article class="entity-card"><div class="entity-top"><div><h3>${esc(x.title)}</h3><p>${esc(x.role || x.relationship || "尚未設定角色")}</p></div><span class="pill">${esc(x.type || "人物")}</span></div><div class="dream-meta"><span>${esc(x.contact || "尚未填寫聯絡方式")}</span><span>${esc(x.description || "")}</span></div><div class="card-actions"><button class="small-button danger" data-del="people" data-id="${x.id}">刪除</button></div></article>`);
     list("tasks", "#taskList", x => `<div class="list-item"><div class="item-main"><strong>${esc(x.title)}</strong><small>${esc(x.due || "")}</small></div><span class="pill">${esc(x.quadrantLabel || "未分類")}</span><button data-del="tasks" data-id="${x.id}">刪除</button></div>`);
     list("goals", "#goalList", x => `<article class="card"><h3>${esc(x.title)}</h3><p>${esc(x.description || "")}</p><button data-del="goals" data-id="${x.id}">刪除</button></article>`);
     list("projects", "#projectList", x => `<article class="card"><h3>${esc(x.title)}</h3><p>${esc(x.description || "")}</p><button data-del="projects" data-id="${x.id}">刪除</button></article>`);
@@ -361,6 +362,7 @@
     list("dreams", "#dreamList", x => `<article class="entity-card"><div class="entity-top"><div><h3>${esc(x.title)}</h3><p>${esc(x.reason || x.description || "還沒有補充說明")}</p></div><span class="pill ${x.feasibility === "feasible" ? "green" : "purple"}">${x.feasibilityLabel || "尚未評估"}</span></div><div class="dream-meta"><span>預估金額：${x.estimatedCost ? money(x.estimatedCost) : "未填"}</span><span>預估時間：${x.estimatedHours ? esc(x.estimatedHours) + " 小時" : "未填"}</span></div><div class="card-actions"><button class="small-button" data-promote-dream="${x.id}">轉為目標</button><button class="small-button danger" data-del="dreams" data-id="${x.id}">刪除</button></div></article>`);
     list("orr", "#orrList", x => `<article class="entity-card"><div class="entity-top"><div><h3>${esc(x.title)}</h3><p>${esc(x.description || "")}</p></div><span class="pill">${esc(x.kind || "ORR 節點")}</span></div><div class="dream-meta"><span>連結目標：${esc((data.goals.find(g => g.id === x.goalId) || {}).title || "未指定")}</span><span>狀態：${esc(x.status || "規劃中")}</span></div><div class="card-actions"><button class="small-button danger" data-del="orr" data-id="${x.id}">刪除</button></div></article>`);
     list("workProfiles", "#workList", x => `<article class="entity-card"><div class="entity-top"><div><h3>${esc(x.title)}</h3><p>${esc(x.typeLabel || "工作／收入來源")} · ${x.stable === "yes" ? "固定收入" : "收入可變"}</p></div><span class="pill green">${money(x.monthlyIncome || 0)}／月</span></div><div class="dream-meta"><span>工作：${esc(x.hoursPerWeek || 0)} 小時／週</span><span>可投入：${esc(x.availableHours || 0)} 小時／週</span></div><div class="card-actions"><button class="small-button danger" data-del="workProfiles" data-id="${x.id}">刪除</button></div></article>`);
+    list("things", "#thingsList", x => `<article class="entity-card"><div class="entity-top"><div><h3>${esc(x.title)}</h3><p>${esc(x.categoryLabel || "物品")} · ${esc(x.status || "使用中")}</p></div><span class="pill">${x.value ? money(x.value) : "未估值"}</span></div><div class="dream-meta"><span>${esc(x.location || "未填寫位置")}</span><span>${x.expiryDate ? "到期：" + esc(x.expiryDate) : "無到期日"}</span></div><div class="card-actions"><button class="small-button danger" data-del="things" data-id="${x.id}">刪除</button></div></article>`);
     const open = data.tasks.filter(x => !x.done).length, goals = data.goals.length, projects = data.projects.length;
     const income = data.transactions.filter(x => x.type === "income").reduce((a,x)=>a+Number(x.amount||0),0), expense = data.transactions.filter(x => x.type !== "income").reduce((a,x)=>a+Number(x.amount||0),0);
     const set = (s,v) => { const e=document.querySelector(s); if(e)e.textContent=v; };
@@ -370,9 +372,9 @@
     set("#statTasks", open); set("#statGoals", goals); set("#statProjects", projects); set("#statBalance", money(income-expense)); set("#financeIncome", money(income)); set("#financeExpense", money(expense)); set("#financeNet", money(income-expense)); set("#resourceIncome", money(resourceIncome)); set("#resourceHours", resourceHours + " 小時"); set("#resourceFreeHours", resourceFreeHours + " 小時");
     list("tasks", "#dashboardTasks", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`); list("goals", "#dashboardGoals", x => `<div class="list-item"><strong>${esc(x.title)}</strong></div>`);
     const relationItems = [
+      ...data.transactions.map(x => ({ item: x, link: x.personId || x.thingId || x.goalId || x.projectId })),
       ...data.projects.map(x => ({ item: x, link: x.goalId })),
       ...data.tasks.map(x => ({ item: x, link: x.goalId || x.projectId })),
-      ...data.transactions.map(x => ({ item: x, link: x.goalId || x.projectId })),
       ...data.habits.map(x => ({ item: x, link: x.goalId })),
       ...data.orr.map(x => ({ item: x, link: x.goalId || x.dreamId }))
     ];
@@ -395,16 +397,20 @@
   function openEntryDialog(kind) {
     const node = dialog(); if (!node) return;
     entryKind = kind;
-    const titles = { tasks: "新增任務", dreams: "新增夢想", goals: "新增目標", orr: "新增 ORR 節點", projects: "新增專案", transactions: "新增收支", habits: "新增習慣", workProfiles: "新增工作／收入" };
+    const titles = { people: "新增人物", tasks: "新增任務", dreams: "新增夢想", goals: "新增目標", orr: "新增 ORR 節點", projects: "新增專案", transactions: "新增收支", habits: "新增習慣", workProfiles: "新增工作／收入", things: "新增物品" };
+    const peopleOptions = () => data.people.map(x => ({ value: x.id, label: x.title }));
+    const thingOptions = () => data.things.map(x => ({ value: x.id, label: x.title }));
     const fields = {
+      people: field("姓名／名稱", "title", "text", { required: true, optional: false }) + field("關係或角色", "relationship") + field("工作／身份", "role") + field("聯絡方式", "contact") + field("備註", "description", "textarea"),
       tasks: field("任務名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("到期日", "due", "date") + field("四象限", "quadrant", "select", { items: [{ value: "important-urgent", label: "重要且緊急" }, { value: "important-not-urgent", label: "重要但不緊急" }, { value: "not-important-urgent", label: "不重要但緊急" }, { value: "not-important-not-urgent", label: "不重要且不緊急" }] }) + field("預估時間（分鐘）", "estimatedMinutes", "number") + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("所屬專案", "projectId", "select", { items: projectOptions() }),
       dreams: field("夢想名稱", "title", "text", { required: true, optional: false }) + field("為什麼想完成", "reason", "textarea") + field("目前的阻礙", "barrier", "textarea") + field("預估花費", "estimatedCost", "number") + field("預估投入時間（小時）", "estimatedHours", "number") + field("理想完成日期", "deadline", "date") + field("重要程度", "importance", "select", { items: [{ value: "high", label: "重要" }, { value: "medium", label: "普通" }, { value: "low", label: "低" }] }) + field("目前可行性", "feasibility", "select", { items: [{ value: "unassessed", label: "尚未評估" }, { value: "feasible", label: "可行" }, { value: "adjust", label: "需要調整" }, { value: "not-yet", label: "目前不可行" }] }),
       goals: field("目標名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("目標日期", "targetDate", "date") + field("目標數值", "targetValue", "number"),
       orr: field("ORR 節點名稱", "title", "text", { required: true, optional: false }) + field("這個節點要完成什麼", "description", "textarea") + field("節點類型", "kind", "select", { items: [{ value: "objective", label: "方向／Objective" }, { value: "result", label: "結果／Result" }, { value: "roadmap", label: "路徑／Roadmap" }, { value: "subgoal", label: "小目標" }] }) + field("所屬夢想", "dreamId", "select", { items: data.dreams.map(x => ({ value: x.id, label: x.title })) }) + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("上層 ORR 節點", "parentId", "select", { items: orrOptions() }),
       projects: field("專案名稱", "title", "text", { required: true, optional: false }) + field("說明", "description", "textarea") + field("截止日", "due", "date") + field("預算", "budget", "number") + field("所屬目標", "goalId", "select", { items: goalOptions() }),
-      transactions: field("項目名稱", "title", "text", { required: true, optional: false }) + field("金額", "amount", "number", { placeholder: "未填寫會以 0 計算" }) + field("類型", "type", "select", { items: [{ value: "expense", label: "支出" }, { value: "income", label: "收入" }] }) + field("日期", "date", "date") + field("分類", "category") + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("所屬專案", "projectId", "select", { items: projectOptions() }) + field("備註", "description", "textarea"),
+      transactions: field("項目名稱", "title", "text", { required: true, optional: false }) + field("金額", "amount", "number", { placeholder: "未填寫會以 0 計算" }) + field("類型", "type", "select", { items: [{ value: "expense", label: "支出" }, { value: "income", label: "收入" }] }) + field("日期", "date", "date") + field("分類", "category") + field("相關人物", "personId", "select", { items: peopleOptions() }) + field("相關物品", "thingId", "select", { items: thingOptions() }) + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("所屬專案", "projectId", "select", { items: projectOptions() }) + field("備註", "description", "textarea"),
       habits: field("習慣名稱", "title", "text", { required: true, optional: false }) + field("頻率", "frequency", "select", { items: [{ value: "daily", label: "每天" }, { value: "weekly", label: "每週" }, { value: "custom", label: "自訂" }] }) + field("所屬目標", "goalId", "select", { items: goalOptions() }) + field("備註", "description", "textarea"),
-      workProfiles: field("工作／收入來源名稱", "title", "text", { required: true, optional: false }) + field("類型", "typeLabel", "select", { items: [{ value: "正職", label: "正職" }, { value: "兼職", label: "兼職" }, { value: "自由接案", label: "自由接案" }, { value: "其他收入", label: "其他收入" }] }) + field("每月預估收入", "monthlyIncome", "number") + field("每週工作時間", "hoursPerWeek", "number") + field("每週可投入目標的時間", "availableHours", "number") + field("收入是否固定", "stable", "select", { items: [{ value: "yes", label: "固定" }, { value: "no", label: "不固定" }] }) + field("備註", "description", "textarea")
+      workProfiles: field("工作／收入來源名稱", "title", "text", { required: true, optional: false }) + field("類型", "typeLabel", "select", { items: [{ value: "正職", label: "正職" }, { value: "兼職", label: "兼職" }, { value: "自由接案", label: "自由接案" }, { value: "其他收入", label: "其他收入" }] }) + field("每月預估收入", "monthlyIncome", "number") + field("每週工作時間", "hoursPerWeek", "number") + field("每週可投入目標的時間", "availableHours", "number") + field("收入是否固定", "stable", "select", { items: [{ value: "yes", label: "固定" }, { value: "no", label: "不固定" }] }) + field("備註", "description", "textarea"),
+      things: field("物品／資產名稱", "title", "text", { required: true, optional: false }) + field("類別", "categoryLabel", "select", { items: [{ value: "設備", label: "設備" }, { value: "文件", label: "文件／合約" }, { value: "訂閱", label: "軟體／訂閱" }, { value: "其他", label: "其他" }] }) + field("目前狀態", "status", "select", { items: [{ value: "使用中", label: "使用中" }, { value: "閒置", label: "閒置" }, { value: "待維修", label: "待維修" }, { value: "已淘汰", label: "已淘汰" }] }) + field("目前價值", "value", "number") + field("位置", "location") + field("到期／保固日期", "expiryDate", "date") + field("備註", "description", "textarea")
     }[kind];
     node.querySelector("#dialogTitle").textContent = titles[kind] || "新增項目";
     node.querySelector("#formFields").innerHTML = fields || "";
@@ -414,7 +420,7 @@
     const values = Object.fromEntries(new FormData(form).entries());
     if (!values.title || !values.title.trim()) return;
     const item = { id: id(), title: values.title.trim(), createdAt: new Date().toISOString(), status: "active", goalId: values.goalId || null, projectId: values.projectId || null };
-    ["description", "reason", "barrier", "due", "targetDate", "targetValue", "estimatedMinutes", "budget", "frequency", "date", "category", "deadline", "importance", "feasibility", "estimatedCost", "estimatedHours", "dreamId", "kind", "typeLabel", "monthlyIncome", "hoursPerWeek", "availableHours", "stable", "quadrant", "parentId"].forEach(key => { if (values[key]) item[key] = values[key]; });
+    ["description", "reason", "barrier", "due", "targetDate", "targetValue", "estimatedMinutes", "budget", "frequency", "date", "category", "deadline", "importance", "feasibility", "estimatedCost", "estimatedHours", "dreamId", "kind", "typeLabel", "monthlyIncome", "hoursPerWeek", "availableHours", "stable", "quadrant", "parentId", "relationship", "role", "contact", "personId", "thingId", "categoryLabel", "status", "value", "location", "expiryDate"].forEach(key => { if (values[key]) item[key] = values[key]; });
     if (entryKind === "tasks") { item.status = "open"; item.done = false; item.estimatedMinutes = Number(values.estimatedMinutes || 0); item.actualMinutes = 0; item.quadrantLabel = ({ "important-urgent": "重要且緊急", "important-not-urgent": "重要但不緊急", "not-important-urgent": "不重要但緊急", "not-important-not-urgent": "不重要且不緊急" }[values.quadrant || ""] || "未分類"); }
     if (entryKind === "goals") { item.progress = 0; }
     if (entryKind === "dreams") { item.feasibilityLabel = ({ feasible: "可行", adjust: "需要調整", "not-yet": "目前不可行", unassessed: "尚未評估" }[values.feasibility || "unassessed"]); }
@@ -423,6 +429,7 @@
     if (entryKind === "transactions") { item.amount = Number(values.amount || 0); item.type = values.type || "expense"; item.date = values.date || new Date().toISOString().slice(0, 10); item.category = values.category || "other"; }
     if (entryKind === "habits") item.streak = 0;
     if (entryKind === "workProfiles") { item.monthlyIncome = Number(values.monthlyIncome || 0); item.hoursPerWeek = Number(values.hoursPerWeek || 0); item.availableHours = Number(values.availableHours || 0); }
+    if (entryKind === "things") { item.value = Number(values.value || 0); item.status = values.status || "使用中"; item.categoryLabel = values.categoryLabel || "其他"; }
     data[entryKind].unshift(item); save(); render(); dialog().close(); form.reset();
   }
   document.addEventListener("click", e => {
@@ -437,8 +444,8 @@
       }
       return;
     }
-    const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-task":"tasks","quick-dream":"dreams","quick-goal":"goals","quick-orr":"orr","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits","quick-work":"workProfiles"}; if (action && map[action]) openEntryDialog(map[action]);
-    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const pageTitles = { dashboard: "人生總覽", dreams: "夢想清單", goals: "目標管理", orr: "ORR 拆解", projects: "專案管理", tasks: "任務管理", habits: "習慣追蹤", resources: "工作與資源", finance: "財務管理" }; const title = document.querySelector("#pageTitle"); if (title) title.textContent = pageTitles[page] || "人生 ERP"; const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("open"); }
+    const action = e.target.closest("[data-action]")?.dataset.action; const map = {"quick-person":"people","quick-task":"tasks","quick-dream":"dreams","quick-goal":"goals","quick-orr":"orr","quick-project":"projects","quick-transaction":"transactions","quick-habit":"habits","quick-work":"workProfiles","quick-thing":"things"}; if (action && map[action]) openEntryDialog(map[action]);
+    const page = e.target.closest("[data-page], [data-page-link]")?.dataset.page || e.target.closest("[data-page-link]")?.dataset.pageLink; if (page) { document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active", x.id === "page-"+page)); document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active", x.dataset.page===page)); const pageTitles = { dashboard: "人生總覽", people: "人際與角色", resources: "工作與收入", dreams: "夢想清單", goals: "目標管理", orr: "ORR 拆解", projects: "專案管理", tasks: "任務管理", habits: "習慣追蹤", things: "資產與物品", finance: "財務管理" }; const title = document.querySelector("#pageTitle"); if (title) title.textContent = pageTitles[page] || "人生 ERP"; const sidebar=document.querySelector(".sidebar"); if(sidebar)sidebar.classList.remove("open"); }
     if (e.target.closest("#connectDrive, #syncButton")) window.LifeERPSync?.connectAndSync().then(()=>{ try { data=JSON.parse(localStorage.getItem(KEY)||"null")||data; render(); } catch(_){} }).catch(()=>{});
   });
   document.addEventListener("DOMContentLoaded", () => {
@@ -449,9 +456,13 @@
     if (form) form.addEventListener("submit", event => { event.preventDefault(); submitEntry(form); });
     document.querySelector("#cancelEntry")?.addEventListener("click", () => dialog()?.close());
     document.querySelector("#closeDialog")?.addEventListener("click", () => dialog()?.close());
+    const themeSelect = document.querySelector("#themeSelect");
+    const applyTheme = theme => { const next = theme === "gold" ? "gold" : "dark"; document.documentElement.dataset.theme = next; localStorage.setItem("lifeErpTheme", next); if (themeSelect) themeSelect.value = next; };
+    applyTheme(localStorage.getItem("lifeErpTheme") || "dark");
+    themeSelect?.addEventListener("change", event => applyTheme(event.target.value));
     render(); const t=document.querySelector("#todayLabel"); if(t)t.textContent=new Date().toLocaleDateString("zh-TW");
     const style = document.createElement("style");
-    style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:#1b222d!important;color:#f5f7fb!important;box-shadow:8px 0 24px #0008;overflow:auto!important}.sidebar.open .nav-item{color:#b7c0ce!important}.sidebar.open .nav-item.active{color:#ffb35c!important;background:#3a2b1c!important}.sidebar.open .side-note,.sidebar.open .drive-status{color:#aab3c2!important}.sidebar.open + .main{filter:brightness(.7)}}";
+    style.textContent = "@media (max-width: 800px){.sidebar.open{display:flex!important;visibility:visible!important;opacity:1!important;transform:translateX(0)!important;position:fixed!important;left:0!important;top:0!important;right:auto!important;bottom:0!important;width:min(82vw,320px)!important;height:100vh!important;z-index:2147483647!important;background:var(--paper)!important;color:var(--ink)!important;box-shadow:8px 0 24px #0008;overflow:auto!important}.sidebar.open .nav-item{color:var(--muted)!important}.sidebar.open .nav-item.active{color:var(--accent)!important;background:var(--accent-soft)!important}.sidebar.open .side-note,.sidebar.open .drive-status{color:var(--muted)!important}.sidebar.open + .main{filter:brightness(.7)}}";
     document.head.appendChild(style);
   });
 })();

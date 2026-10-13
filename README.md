@@ -70,6 +70,9 @@ Google 設定介面可能隨版本調整，請依 Cloud Console 的最新提示�
 - `workProfiles`：工作、收入與可投入時間
 - `orr`：目標的 ORR 拆解節點
 - `tasks.quadrant`：重要／緊急四象限分類
+- `people`：人物、關係、角色與聯絡方式
+- `things`：設備、文件、訂閱與其他資產
+- 主題：可在側邊欄選擇深色橘金或燙金主題，設定保存在本機
 
 資料目前以 `localStorage` 儲存，後續透過 `LifeERP-data.json` 同步到 Google Drive。新增模組時，應優先沿用這些關聯欄位，讓 Dashboard 可以從目標一路追蹤到行動、時間、金錢與成果。
 

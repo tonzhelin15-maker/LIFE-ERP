@@ -8,27 +8,33 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="data:,">
 <link rel="stylesheet" href="./styles-v2.css?v=architecture-1">
-<link rel="stylesheet" href="./styles-dark.css?v=architecture-1">  <title>人生 ERP</title>
+<link rel="stylesheet" href="./styles-dark.css?v=architecture-1">
+<link rel="stylesheet" href="./styles-gold.css?v=theme-1">  <title>人生 ERP</title>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand"><div class="brand-mark">人</div><div><strong>人生 ERP</strong><small>PERSONAL OPERATING SYSTEM</small></div></div>
       <nav id="nav" class="nav">
-        <div class="nav-group-label">規劃</div>
+        <div class="nav-group-label">總覽</div>
         <button class="nav-item active" data-page="dashboard">◫ <span>人生總覽</span></button>
+        <div class="nav-group-label">人</div>
+        <button class="nav-item" data-page="people">● <span>人際與角色</span></button>
+        <button class="nav-item" data-page="resources">◌ <span>工作與收入</span></button>
+        <div class="nav-group-label">事</div>
         <button class="nav-item" data-page="dreams">✦ <span>夢想清單</span></button>
         <button class="nav-item" data-page="goals">◎ <span>目標管理</span></button>
-        <div class="nav-group-label">執行</div>
         <button class="nav-item" data-page="orr">◇ <span>ORR 拆解</span></button>
         <button class="nav-item" data-page="projects">▤ <span>專案管理</span></button>
         <button class="nav-item" data-page="tasks">☑ <span>任務管理</span></button>
         <button class="nav-item" data-page="habits">↗ <span>習慣追蹤</span></button>
-        <div class="nav-group-label">資源</div>
-        <button class="nav-item" data-page="resources">◌ <span>工作與資源</span></button>
+        <div class="nav-group-label">物</div>
+        <button class="nav-item" data-page="things">◇ <span>資產與物品</span></button>
+        <div class="nav-group-label">財</div>
         <button class="nav-item" data-page="finance">＄ <span>財務管理</span></button>
       </nav>
       <div class="sidebar-bottom">
+        <div class="theme-picker"><label for="themeSelect">主題</label><select id="themeSelect" aria-label="選擇主題"><option value="dark">深色橘金</option><option value="gold">燙金主題</option></select></div>
         <div id="driveStatus" class="drive-status"><span class="status-dot"></span><span>尚未連結 Google Drive</span></div>
         <button id="connectDrive" class="button button-outline full">連結 Google Drive</button>
         <p class="side-note">資料預設儲存在此裝置。連結雲端後，可手動同步到你的 Google Drive。</p>
@@ -60,7 +66,7 @@
           <article class="panel"><div class="panel-heading"><div><div class="eyebrow">NEXT ACTIONS</div><h3>接下來要做</h3></div><button class="text-button" data-page-link="tasks">查看全部 →</button></div><div id="dashboardTasks" class="item-list"></div></article>
           <article class="panel"><div class="panel-heading"><div><div class="eyebrow">GOALS IN MOTION</div><h3>目標進度</h3></div><button class="text-button" data-page-link="goals">管理目標 →</button></div><div id="dashboardGoals" class="item-list"></div></article>
         </div>
-        <article class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">START SMALL</div><h3>快速建立</h3></div></div><div class="quick-actions"><button data-action="quick-dream">＋ 夢想</button><button data-action="quick-goal">＋ 目標</button><button data-action="quick-orr">＋ ORR</button><button data-action="quick-task">＋ 任務</button><button data-action="quick-project">＋ 專案</button><button data-action="quick-transaction">＋ 收支</button><button data-action="quick-habit">＋ 習慣</button><button data-action="quick-work">＋ 工作</button></div></article>
+        <article class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">START SMALL</div><h3>快速建立</h3></div></div><div class="quick-actions"><button data-action="quick-person">＋ 人物</button><button data-action="quick-dream">＋ 夢想</button><button data-action="quick-goal">＋ 目標</button><button data-action="quick-orr">＋ ORR</button><button data-action="quick-task">＋ 任務</button><button data-action="quick-project">＋ 專案</button><button data-action="quick-thing">＋ 物品</button><button data-action="quick-transaction">＋ 收支</button><button data-action="quick-habit">＋ 習慣</button><button data-action="quick-work">＋ 工作</button></div></article>
         <article class="panel architecture-panel">
           <div class="panel-heading"><div><div class="eyebrow">LIFE ERP ARCHITECTURE</div><h3>人生系統的資料流</h3></div><span id="relationSummary" class="architecture-badge">尚未建立資料</span></div>
           <div class="architecture-flow">
@@ -87,6 +93,12 @@
         <div class="section-intro"><div><h2>夢想清單</h2><p>先把想做的人生記下來，再逐一評估是否可行。</p></div><button class="button button-primary" data-action="quick-dream">＋ 新增夢想</button></div>
         <div class="module-note">夢想不需要一開始就規劃完整；先記錄，之後根據收入、時間與生活條件做可行性評估。</div>
         <div id="dreamList" class="cards-grid"></div>
+      </section>
+
+      <section id="page-people" class="page">
+        <div class="section-intro"><div><h2>人際與角色</h2><p>記錄與你的人生、工作和專案有關的人。</p></div><button class="button button-primary" data-action="quick-person">＋ 新增人物</button></div>
+        <div class="module-note">人可以和專案、收支、物品互相連結。先從最常接觸的人開始，不需要一次建完全部資料。</div>
+        <div id="peopleList" class="cards-grid"></div>
       </section>
 
       <section id="page-orr" class="page">
@@ -125,6 +137,12 @@
         <div id="workList" class="cards-grid"></div>
       </section>
 
+      <section id="page-things" class="page">
+        <div class="section-intro"><div><h2>資產與物品</h2><p>管理設備、文件、訂閱與其他對你有價值的物。</p></div><button class="button button-primary" data-action="quick-thing">＋ 新增物品</button></div>
+        <div class="module-note">例如電腦、相機、硬碟、課程、合約與重要文件，都可以在這裡建立並連到支出或專案。</div>
+        <div id="thingsList" class="cards-grid"></div>
+      </section>
+
       <section id="page-habits" class="page">
         <div class="section-intro"><div><h2>習慣追蹤</h2><p>重點不是每天完美，而是看見自己持續累積。</p></div><button class="button button-primary" data-action="quick-habit">＋ 新增習慣</button></div>
         <div id="habitList" class="cards-grid"></div>
@@ -144,6 +162,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="./app-v3.js?v=life-system-1"></script>
+<script src="./app-v3.js?v=gold-theme-1"></script>
 </body>
 </html>

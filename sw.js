@@ -1,5 +1,5 @@
-const CACHE = "life-erp-v5-life-system";
-const ASSETS = ["./", "./index.html", "./styles-v2.css", "./styles-dark.css", "./app-v3.js", "./manifest.webmanifest"];
+const CACHE = "life-erp-v7-gold-theme";
+const ASSETS = ["./", "./index.html", "./styles-v2.css", "./styles-dark.css", "./styles-gold.css", "./app-v3.js", "./manifest.webmanifest"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS))));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))));
 self.addEventListener("fetch", event => {
